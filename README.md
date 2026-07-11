@@ -5,4 +5,4 @@
 
 #### このサイトを基軸にwebページを作っていきます。
 # ライセンス
-### Apatchi License 2.0
+### ApacheLicense 2.0
