@@ -2,16 +2,15 @@
 const body = document.body
 const bind_keys = ["Space", "ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft", ]
 body.addEventListener("keydown", event => {
-    console.log(bind_keys.includes(event.code))
     if (bind_keys.includes(event.code) === true){
         event.preventDefault()
     }
 });
 
-const display = document.getElementById("game_field");
+const display = document.getElementById("game_field_3d");
+const display_2d = document.getElementById("game_field_2d");
 const displayHeight = display.clientHeight;
 const displayWidth = display.clientWidth;
-
 
 const world = new CANNON.World();
 world.gravity.set(0, 0, -9.82);
@@ -20,9 +19,13 @@ const ground_data = []
 
 const Width = displayWidth;
 const Height = displayHeight;
-const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: display });
+const renderer = new THREE.WebGLRenderer({ antialias: false, canvas: display });
 renderer.setSize(Width, Height);
 renderer.setClearColor(0xdddddd, 1);
+renderer.setPixelRatio(2)
+display_2d.width = Width;
+display_2d.height = Height;
+
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(70, Width / Height);
 camera.position.y = -1.7;
@@ -74,10 +77,10 @@ class medalPhysics {
         this.id = id;
         this.name = `medal_${id}`;
     
-        const medalGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.02, 24);
+        const medalGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.02, 16);
         medalGeometry.rotateX(Math.PI / 2);
         const medalMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.85, roughness: 0.2 });
-        const medal_Shape = new CANNON.Cylinder(0.1, 0.1, 0.02, 6);
+        const medal_Shape = new CANNON.Cylinder(0.1, 0.1, 0.02, 8);
         const medal_Position = new CANNON.Vec3(pos_x, pos_y, pos_z);
 
         this.body = new CANNON.Body({ mass: 1, shape: medal_Shape, position: medal_Position, material: medal_Material });
@@ -113,16 +116,24 @@ for (let i = 1; i <= 100; i++) {
 const speed = Math.PI
 const pusher_velocity = 0.2
 let Time = 0
+let medal_remaining = 30
 
 let key_down = false
 
 function medal_add() {
-    medal_i += 1
-    const medal = new medalPhysics(medal_i, world, Math.random() * 2 - 1, 0.8, 2)
-    scene.add(medal.mesh);
-    medalList.push(medal);
-    key_down = true
+    if (medal_remaining > 1) {
+        medal_remaining -= 1
+        console.log(medal_remaining)
+        medal_i += 1
+        const medal = new medalPhysics(medal_i, world, Math.random() * 2 - 1, 0.8, 2)
+        scene.add(medal.mesh);
+        medalList.push(medal);
+        key_down = true
+    };
 }
+
+const medal_context = display_2d.getContext("2d");
+
 
 function render() {
     Time += 1
@@ -175,6 +186,13 @@ function render() {
     })
     world.step(1 / 120);
     renderer.render(scene, camera);
+
+    medal_context.clearRect(0, 0, Width, Height)
+    medal_context.beginPath()
+    medal_context.font = "32px system-ui";
+    medal_context.fillStyle = "#000000"
+    medal_context.fillText(`クレジット: ${medal_remaining}`, 10, 40)
+
     requestAnimationFrame(render);
 }
 render();
