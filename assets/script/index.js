@@ -121,9 +121,8 @@ let medal_remaining = 30
 let key_down = false
 
 function medal_add() {
-    if (medal_remaining > 1) {
+    if (medal_remaining >= 1) {
         medal_remaining -= 1
-        console.log(medal_remaining)
         medal_i += 1
         const medal = new medalPhysics(medal_i, world, Math.random() * 2 - 1, 0.8, 2)
         scene.add(medal.mesh);
