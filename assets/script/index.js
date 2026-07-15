@@ -22,7 +22,7 @@ const Height = displayHeight;
 const renderer = new THREE.WebGLRenderer({ antialias: false, canvas: display });
 renderer.setSize(Width, Height);
 renderer.setClearColor(0xdddddd, 1);
-renderer.setPixelRatio(2)
+renderer.setPixelRatio(1)
 display_2d.width = Width;
 display_2d.height = Height;
 
