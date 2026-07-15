@@ -6,11 +6,11 @@ body.addEventListener("keydown", event => {
         event.preventDefault()
     }
 });
-
-const display = document.getElementById("game_field_3d");
+const displayCurrent = document.getElementById("game");
+const display_3d = document.getElementById("game_field_3d");
 const display_2d = document.getElementById("game_field_2d");
-const displayHeight = display.clientHeight;
-const displayWidth = display.clientWidth;
+const displayHeight = displayCurrent.clientHeight;
+const displayWidth = displayCurrent.clientWidth;
 
 const world = new CANNON.World();
 world.gravity.set(0, 0, -9.82);
@@ -19,10 +19,12 @@ const ground_data = []
 
 const Width = displayWidth;
 const Height = displayHeight;
-const renderer = new THREE.WebGLRenderer({ antialias: false, canvas: display });
+const renderer = new THREE.WebGLRenderer({ antialias: false, canvas: display_3d });
 renderer.setSize(Width, Height);
 renderer.setClearColor(0xdddddd, 1);
 renderer.setPixelRatio(1)
+display_3d.width = Width;
+display_3d.height = Height;
 display_2d.width = Width;
 display_2d.height = Height;
 
@@ -141,12 +143,12 @@ function render() {
             medal_add()
         }
     });
-    display.addEventListener("mousedown", (event) => {
+    display_2d.addEventListener("mousedown", (event) => {
         if (key_down === false) {
             medal_add()
         }
     });
-    display.addEventListener("touchstart", (event) => {
+    display_2d.addEventListener("touchstart", (event) => {
         if (key_down === false) {
             medal_add()
         }
@@ -158,12 +160,12 @@ function render() {
             key_down = false
         }
     });
-    display.addEventListener("mouseup", (event) => {
+    display_2d.addEventListener("mouseup", (event) => {
         if (key_down === true) {
             key_down = false
         }
     });
-    display.addEventListener("touchend", (event) => {
+    display_2d.addEventListener("touchend", (event) => {
         if (key_down === true) {
             key_down = false
         }
