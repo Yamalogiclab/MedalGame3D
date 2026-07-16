@@ -9,16 +9,14 @@ body.addEventListener("keydown", event => {
 const displayCurrent = document.getElementById("game");
 const display_3d = document.getElementById("game_field_3d");
 const display_2d = document.getElementById("game_field_2d");
-const displayHeight = displayCurrent.clientHeight;
-const displayWidth = displayCurrent.clientWidth;
+const Height = displayCurrent.clientHeight;
+const Width = displayCurrent.clientWidth;
 
 const world = new CANNON.World();
 world.gravity.set(0, 0, -9.82);
 
 const ground_data = []
 
-const Width = displayWidth;
-const Height = displayHeight;
 const renderer = new THREE.WebGLRenderer({ antialias: false, canvas: display_3d });
 renderer.setSize(Width, Height);
 renderer.setClearColor(0xdddddd, 1);
@@ -35,7 +33,7 @@ camera.position.z = 1.5;
 camera.rotation.x = Math.PI / 32 * 11;
 scene.add(camera);
 
-const ground_material = new CANNON.Material("ground_material")
+const ground_material = new CANNON.Material("ground_material");
 
 const groundGeometry = new THREE.BoxGeometry(2, 1, 2);
 groundGeometry.rotateX(Math.PI / 2);
@@ -52,6 +50,14 @@ const ground_2_position = new CANNON.Vec3(0, 2, 0.5);
 const ground_2_Body = new CANNON.Body({ mass: 0, shape: ground_Shape, position: ground_2_position, material: ground_material });
 world.addBody(ground_2_Body);
 scene.add(ground_2);
+
+const hole_material = new CANNON.Material("hole_material");
+const hole_Shape = new CANNON.Box(new CANNON.Vec3(1, 0.25, 0.25));
+const hole_position = new CANNON.Vec3(0, -1.25, -0.25);
+const hole_Body = new CANNON.Body({ mass: 0, shape: hole_Shape, position: hole_position, material: hole_material, });
+hole_Body.tag = "hole"
+world.addBody(hole_Body);
+
 
 
 const move_groundGeometry = new THREE.BoxGeometry(2, 0.3, 2);
@@ -78,6 +84,7 @@ class medalPhysics {
     constructor(id, world, pos_x, pos_y, pos_z) {
         this.id = id;
         this.name = `medal_${id}`;
+        this.removed = false;
     
         const medalGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.02, 16);
         medalGeometry.rotateX(Math.PI / 2);
@@ -90,12 +97,26 @@ class medalPhysics {
         this.mesh.position.set(0, 0, 0);
 
         world.addBody(this.body);
+
+        this.body.addEventListener("collide", (event) => {
+            if (event.body.tag === "hole" && this.removed === false) {
+                console.log("bro")
+                this.destroy()
+                medal_remaining += 1;
+            }
+        });
     }
 
     update() {
-        
-        this.mesh.position.copy(this.body.position);
-        this.mesh.quaternion.copy(this.body.quaternion);
+        if (this.removed === false) {
+            this.mesh.position.copy(this.body.position);
+            this.mesh.quaternion.copy(this.body.quaternion);
+        }
+    }
+
+    destroy() {
+        this.removed = true
+        medalDeleteWaiting.push(this)
     }
     
 }
@@ -104,11 +125,12 @@ world.addContactMaterial(MedalContactMaterial);
 const GroundContactMaterial = new CANNON.ContactMaterial(ground_material, medal_Material,{ friction: 0.01, restitution: 0.0 });
 world.addContactMaterial(GroundContactMaterial);
 
-var medalList = []
-var medalDeleteWaiting = []
-var medal_i = 1;
+const medalList = []
+const medalDeleteWaiting = []
+let medal_i = 1;
 
-for (let i = 1; i <= 100; i++) {
+
+for (let i = 1; i <= 200; i++) {
     const medal = new medalPhysics(i, world, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 1 + 3)
     scene.add(medal.mesh);
     medalList.push(medal);
@@ -135,8 +157,27 @@ function medal_add() {
 
 const medal_context = display_2d.getContext("2d");
 
+function text_render() {
+    medal_context.clearRect(0, 0, Width, Height)
+    medal_context.beginPath()
+    medal_context.font = "32px system-ui";
+    medal_context.fillStyle = "#000000"
+    medal_context.fillText(`クレジット: ${medal_remaining}`, 10, 40)
+}
+
+function ground_update() {
+    ground_1.position.copy(ground_1_Body.position);
+    ground_1.quaternion.copy(ground_1_Body.quaternion);
+    ground_2.position.copy(ground_2_Body.position);
+    ground_2.quaternion.copy(ground_2_Body.quaternion);
+
+    move_ground_Body.velocity.set(0, Math.sin(speed * Time / 120) * speed * pusher_velocity * -1, 0)
+    move_ground_1.position.copy(move_ground_Body.position);
+    move_ground_1.quaternion.copy(move_ground_Body.quaternion);
+}
 
 function render() {
+    requestAnimationFrame(render);
     Time += 1
     addEventListener("keydown", (event) => {
         if (key_down === false && event.code === "Space") {
@@ -171,29 +212,24 @@ function render() {
         }
     });
 
-
-
-    ground_1.position.copy(ground_1_Body.position);
-    ground_1.quaternion.copy(ground_1_Body.quaternion);
-    ground_2.position.copy(ground_2_Body.position);
-    ground_2.quaternion.copy(ground_2_Body.quaternion);
-
-    move_ground_Body.velocity.set(0, Math.sin(speed * Time / 120) * speed * pusher_velocity * -1, 0)
-    move_ground_1.position.copy(move_ground_Body.position);
-    move_ground_1.quaternion.copy(move_ground_Body.quaternion);
+    world.step(1 / 120);
+    
+    ground_update()
     
     medalList.forEach((medal) => {
         medal.update();
     })
-    world.step(1 / 120);
+
     renderer.render(scene, camera);
+    text_render()
 
-    medal_context.clearRect(0, 0, Width, Height)
-    medal_context.beginPath()
-    medal_context.font = "32px system-ui";
-    medal_context.fillStyle = "#000000"
-    medal_context.fillText(`クレジット: ${medal_remaining}`, 10, 40)
+    while (medalDeleteWaiting.length > 0) {
+        const medalDeleting = medalDeleteWaiting.pop()
+        world.removeBody(medalDeleting.body)
+        scene.remove(medalDeleting.mesh)
+        medalDeleting.mesh.geometry.dispose()
+        medalDeleting.mesh.material.dispose()
+    }
 
-    requestAnimationFrame(render);
 }
 render();
