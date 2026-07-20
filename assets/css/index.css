@@ -1,0 +1,126 @@
+body {
+    top: 0;
+    left: 0;
+    margin: 0;
+    background-color: #202020;
+}
+canvas {
+    display: block;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+a {
+    text-decoration: none;
+}
+#content_box {
+    display: block;
+    position: relative;
+    margin-top: 64px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: auto;
+    width: 1080px;
+    background-color: #1a1a1a;
+}
+#game {
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    height: 600px;
+    width: 800px;
+}
+#game_field_3d {
+    display: block;
+    position: absolute;
+    height: auto;
+    width: auto;
+    image-rendering: pixelated;
+}
+#game_field_2d {
+    display: block;
+    position: absolute;
+    height: auto;
+    width: auto;
+}
+#title {
+    display: block;
+    position: relative;
+    text-align: center;
+    height: auto;
+    width: 100%;
+    font-family: "Segoe UI", "Yu Gothic UI", "Hiragino Sans";
+    font-size: 40px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 0 5px white;
+}
+#creator_namebox {
+    display: block flex;
+    position: relative;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    width: auto;
+}
+#name_by {
+    margin-left: auto;
+    padding-right: 5px;
+    color: white;
+}
+#name_main {
+    margin-right: auto;
+    padding-left: 5px;
+    color: #1e90ff;
+}
+.creator_name {
+    display: inline;
+    position: relative;
+    height: auto;
+    width: auto;
+    font-size: 24px;
+    font-weight: 500;
+    font-family: "Segoe UI", "Yu Gothic UI", "Hiragino Sans";
+}
+.game_explaintitle {
+    display: block;
+    position: relative;
+    text-align: center;
+    margin-top: 32px;
+    height: auto;
+    width: 100%;
+    font-family: "Segoe UI", "Yu Gothic UI", "Hiragino Sans";
+    font-size: 40px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 0 5px white;
+    
+}
+.game_explainbox {
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 24px;
+    padding: 15px;
+    height: auto;
+    width: 480px;
+    border-radius: 10px;
+    background-color: #121212;
+}
+.explain {
+    display: block;
+    position: relative;
+    height: auto;
+    width: 100%;
+    font-family: "Segoe UI", "Yu Gothic UI", "Hiragino Sans";
+    font-size: 20px;
+    font-weight: 400;
+    color: white;
+    overflow-wrap: anywhere;
+}
