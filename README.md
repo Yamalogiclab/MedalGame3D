@@ -4,4 +4,5 @@
 #### The medal game has worked on Javascript. THREE.js and Cannon.js are used as library of the game.
 
 ## ウェブサイト版 / Web site ver
-#### [こちら](https://yamalogiclab.github.io/MedalGame3D/ "web版")
+
+https://yamalogiclab.github.io/MedalGame3D/
