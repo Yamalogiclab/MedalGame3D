@@ -307,7 +307,7 @@ function swipe_event() {
 
     display_2d.addEventListener("touchend", (event) => { 
         event.preventDefault()
-        if (swipe_amountX <= 32 && swipe_amountY <= 32) {
+        if (swipe_amountX <= 64 && swipe_amountY <= 64) {
             medal_add()
         }
         swipe_amountX = 0
@@ -361,7 +361,7 @@ function camera_rotate() {
         camera_rotateY += 1
         camera_Y_rotated = true
     }
-    if (swipe_amountX > 32 || swipe_amountY > 32) {
+    if (swipe_amountX > 64 || swipe_amountY > 64) {
         camera_rotateX += swipe_Y / 320 * 16
         camera_rotateY += swipe_X / 320 * 16
     }
