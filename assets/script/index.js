@@ -286,6 +286,7 @@ let swipe_amountX = 0
 let swipe_amountY = 0
 let swipe_X = 0
 let swipe_Y = 0
+let swiped = false
 
 function swipe_event() {
     display_2d.addEventListener("touchstart", (event) => {
@@ -296,8 +297,8 @@ function swipe_event() {
 
     display_2d.addEventListener("touchmove", (event) => {
         event.preventDefault()
-        swipe_amountX += Math.abs(swipe_beginX - event.touches[0].clientX)
-        swipe_amountY += Math.abs(swipe_beginY - event.touches[0].clientY)
+        swipe_amountX += Math.abs(event.touches[0].clientX - swipe_beginX)
+        swipe_amountY += Math.abs(event.touches[0].clientY - swipe_beginY)
         swipe_X = swipe_beginX - event.touches[0].clientX
         swipe_Y = swipe_beginY - event.touches[0].clientY
         swipe_beginX = event.touches[0].clientX
@@ -314,6 +315,7 @@ function swipe_event() {
         swipe_X = 0
         swipe_Y = 0
     });
+    swiped = true
 }
 
 function medal_put_event() {
@@ -372,6 +374,7 @@ function render() {
     Time += 1
     camera_X_rotated = false
     camera_Y_rotated = false
+    swiped = false
     keyStatus_get()
     swipe_event()
     camera_rotate()
