@@ -292,7 +292,7 @@ function swipe_event() {
     display_2d.addEventListener("touchstart", (event) => {
         swipe_beginX = event.touches[0].clientX
         swipe_beginY = event.touches[0].clientY
-    });
+    }, { passive: true });
 
     display_2d.addEventListener("touchmove", (event) => {
         swipe_amountX += Math.abs(event.touches[0].clientX - swipe_beginX)
@@ -301,7 +301,7 @@ function swipe_event() {
         swipe_Y = swipe_beginY - event.touches[0].clientY
         swipe_beginX = event.touches[0].clientX
         swipe_beginY = event.touches[0].clientY
-    });
+    }, { passive: true });
 
     display_2d.addEventListener("touchend", (event) => { 
         if (swipe_amountX <= 64 && swipe_amountY <= 64) {
@@ -311,7 +311,7 @@ function swipe_event() {
         swipe_amountY = 0
         swipe_X = 0
         swipe_Y = 0
-    });
+    }, { passive: true });
     swiped = true
 }
 
