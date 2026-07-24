@@ -32,16 +32,22 @@ a {
     margin-right: auto;
     height: 600px;
     width: 800px;
+    touch-action: none;
 }
 #game_field_3d {
     display: block;
     position: absolute;
-    height: 600px;
-    width: 800px;
+    height: auto;
+    width: auto;
+    image-rendering: pixelated;
+    touch-action: none;
 }
 #game_field_2d {
     display: block;
     position: absolute;
+    height: auto;
+    width: auto;
+    touch-action: none;
 }
 #title {
     display: block;
