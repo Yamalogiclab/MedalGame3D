@@ -5,6 +5,8 @@
 
 #### このメダルゲームはJavascript環境で動いています。ライブラリにTHREE.jsとCannon.jsを使用しています。
 #### The medal game has worked on Javascript. THREE.js and Cannon.js are used as library of the game.
+#### 各バージョンのブランチはアーカイブ用となっております。
+#### Each brunches are as archive.
 
 ## ウェブサイト版 / Web site ver
 
