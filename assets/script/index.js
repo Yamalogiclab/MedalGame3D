@@ -290,13 +290,11 @@ let swiped = false
 
 function swipe_event() {
     display_2d.addEventListener("touchstart", (event) => {
-        event.preventDefault()
         swipe_beginX = event.touches[0].clientX
         swipe_beginY = event.touches[0].clientY
     });
 
     display_2d.addEventListener("touchmove", (event) => {
-        event.preventDefault()
         swipe_amountX += Math.abs(event.touches[0].clientX - swipe_beginX)
         swipe_amountY += Math.abs(event.touches[0].clientY - swipe_beginY)
         swipe_X = swipe_beginX - event.touches[0].clientX
@@ -306,7 +304,6 @@ function swipe_event() {
     });
 
     display_2d.addEventListener("touchend", (event) => { 
-        event.preventDefault()
         if (swipe_amountX <= 64 && swipe_amountY <= 64) {
             medal_add()
         }
